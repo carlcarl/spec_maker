@@ -262,7 +262,8 @@ def make_spec(spec_name, node_list):
 
 
 def get_all_specs():
-    return [f for f in os.listdir(OUTPUT_SPEC_PATH) if os.path.isdir(f)]
+    return [f for f in os.listdir(OUTPUT_SPEC_PATH)
+            if os.path.isdir(os.path.join(OUTPUT_SPEC_PATH, f))]
 
 
 if __name__ == '__main__':
