@@ -1,0 +1,11 @@
+MySQL-python==1.2.5
+Pillow==2.3.1
+Django==1.7.0
+Sphinx==1.2.3
+# django-allauth==0.17.0
+django_compressor==1.4
+# Required by django-compressor
+django-appconf==0.6
+six==1.6.1
+
+BeautifulSoup4==4.3.2

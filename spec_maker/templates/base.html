@@ -1,0 +1,104 @@
+{% load compress %}
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+		<meta charset="utf-8">
+		<title>{% block title %}{% endblock %}</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<!-- for Google -->
+		<meta name="description" content="{% block meta-description %}{% endblock %}">
+		<meta name="author" content="{% block meta-author %}{% endblock %}">
+		<meta name="keywords" content="{% block meta-keywords %}{% endblock %}">
+		<meta name="application-name" content="{% block meta-application-name %}{% endblock %}" />
+
+		<!-- for Facebook -->
+		<meta property="og:title" content="{% block meta-og-title %}{% endblock %}" />
+		<meta property="og:site_name" content="{% block meta-og-site-name %}{% endblock %}"/>
+		<meta property="og:type" content="{% block meta-og-type %}{% endblock %}" />
+		<meta property="og:image" content="{% block meta-og-image %}{% endblock %}" />
+		<meta property="og:url" content="{% block meta-og-url %}{% endblock %}" />
+		<meta property="og:description" content="{% block meta-og-description %}{% endblock %}" />
+
+		{% block extra-meta %}{% endblock %}
+
+		{% block verdor-css %}
+		<link rel="stylesheet" href="{% static "vendor/bootstrap3/3.1.1/css/bootstrap.min.css" %}">
+		{% endblock %}
+		{% compress css %}
+		{% endcompress %}
+		{% block css %}
+		<link rel="stylesheet" href="{% static "css/style.css" %}">
+		{% endblock %}
+		{% block extra-css %}
+		{% endblock %}
+		<style>
+			body {
+				padding-top: 60px;
+				padding-bottom: 100px;
+			}
+		</style>
+		{% block extra-head %}
+		{% endblock %}
+	</head>
+	<body>
+		{% block body %}
+		<header class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/">Spec Maker</a>
+			</div>
+			<nav class="navbar-collapse collapse">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="/">Home</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="#">有這一列看起來比較好看</a></li>
+				<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Menu <span class="caret"></span></a>
+				<ul class="dropdown-menu" role="menu">
+					<li><a href="{% url 'new_spec' %}">New Spec</a></li>
+					<li><a href="{% url 'spec_list' %}">Spec List</a></li>
+					<li><a href="{% url 'upload_image' %}">Upload Image</a></li>
+				</ul>
+				</li>
+			</ul>
+			</nav>
+		</div>
+		</header>
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-10 col-sm-offset-1">
+					{% block content %}{% endblock %}
+				</div>
+			</div>
+		</div>
+		<footer class="footer">
+		<div class="container clearfix">
+			<p>
+			Copyright &copy; 2014 carlcarl
+			</p>
+		</div>
+		</footer>
+
+		{% block vendor-js %}
+		<script src="{% static "vendor/jquery/1.10.2/jquery.min.js" %}"></script>
+		<script src="{% static "vendor/bootstrap3/3.1.1/js/bootstrap.min.js" %}"></script>
+		{% endblock %}
+		{% compress js %}
+		{% endcompress %}
+		{% block js %}
+		{% endblock %}
+		{% block extra-js %}
+		{% endblock %}
+
+		{% endblock %} {# body #}
+		{% block extra-body %}
+		{% endblock %}
+	</body>
+</html>
+{# vim: set tabstop=4 noexpandtab shiftwidth=4 softtabstop=4: #}

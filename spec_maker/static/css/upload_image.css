@@ -1,0 +1,12 @@
+.upload-image-box {
+  min-height: 500px;
+  border: none;
+}
+
+.upload-image-box.border{
+  border: 2px solid #0B85A1;
+}
+
+.drag-image-here {
+  line-height: 500px;
+}

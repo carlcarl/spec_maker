@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load url from future %}
+{% load staticfiles %}
+{% block verdor-css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static "vendor/jstree/3.0.8/themes/default/style.min.css" %}">
+{% endblock %}
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static "css/new_spec.css" %}">
+{% endblock %}
+{% block extra-css %}
+{% endblock %}
+
+{% block title %}New Spec{% endblock %}
+
+{% block content %}
+<form class="form content">
+	<h1 class="text-center">New Spec</h1>
+	<hr>
+	<div>
+		<label for="spec-name">Project Name: </label>
+		<input id="spec-name">
+	</div>
+	<div id="jstree-container" class="jstree-container">
+		<div id="jstree-block"></div>
+	</div>
+	<button id="submit-tree" class="btn btn-primary">Submit</button>
+	<button id="import-tree" class="btn btn-success">Import</button>
+</form>
+<!-- Modal -->
+<div class="modal fade" id="specModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h4 class="modal-title" id="myModalLabel">Select a Spec</h4>
+			</div>
+			<div id="spec-box" class="modal-body">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" id="spec-modal-import" class="btn btn-primary" data-dismiss="modal">Import</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/template" id="spec-template">
+	<label class="radio-inline">
+		<input type="radio" name="specOptions" value="<%= projectName %>"> <%= projectName %>
+	</label>
+</script>
+{% endblock %}
+
+{% block vendor-js %}
+{{ block.super }}
+<script src="{% static "vendor/jstree/3.0.8/jstree.min.js" %}"></script>
+<script src="{% static "vendor/underscore.js/1.6.0/underscore-min.js" %}"></script>
+{% endblock %}
+{% block js %}
+<script src="{% static "js/csrf.js" %}"></script>
+<script src="{% static "js/new_spec.js" %}"></script>
+{% endblock %}
+{# vim: set tabstop=4 noexpandtab shiftwidth=4 softtabstop=4: #}

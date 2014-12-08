@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load url from future %}
+{% load staticfiles %}
+{% block verdor-css %}
+{{ block.super }}
+{% endblock %}
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static "css/spec_list.css" %}">
+{% endblock %}
+
+{% block title %}Spec List{% endblock %}
+
+{% block content %}
+<div class="content">
+	<h1 class="text-center">Spec List</h1>
+	<hr>
+	{% for spec in specs %}
+	<div class="spec-box">
+		<a href="#">{{ spec }}</a>
+	</div>
+	{% endfor %}
+</div>
+
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+{# vim: set tabstop=4 noexpandtab shiftwidth=4 softtabstop=4: #}

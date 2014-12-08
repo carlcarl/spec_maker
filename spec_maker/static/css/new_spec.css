@@ -1,0 +1,9 @@
+.content {
+  max-width: 600px;
+}
+
+.jstree-container {
+  margin: 10px;
+  height: 300px;
+  overflow-y: scroll;
+}

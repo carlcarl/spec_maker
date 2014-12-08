@@ -1,0 +1,19 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load account %}
+{% load url from future %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% block content %}
+<form class="form-signin" role="form" method="POST" action="{% url 'account_login' %}">
+  <h2 class="form-signin-heading">{% trans "Please Sign In" %}</h2>
+  {% load socialaccount %}
+  <a class="btn btn-block btn-social btn-lg btn-facebook" href="{% provider_login_url "facebook" method="js_sdk" %}">
+    <i class="fa fa-facebook"></i> Sign in with Facebook
+  </a>
+</form>
+{% providers_media_js %}
+
+{% endblock %}
