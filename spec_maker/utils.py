@@ -5,6 +5,7 @@ import json
 import logging
 import sys
 import subprocess
+import shutil
 
 
 SPHINX_TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'doc')
@@ -215,20 +216,11 @@ def _make_index_files(tree):
 
 def _make_empty_spec(spec_name):
     spec_path = os.path.join(OUTPUT_SPEC_PATH, spec_name)
-    args = [
-        'cp',
-        '-r',
-        SPHINX_TEMPLATE_PATH,
-        spec_path
-    ]
-    p = subprocess.Popen(
-        args,
-        stdout=subprocess.PIPE
-    )
-    output = p.communicate()[0]
-    status = p.returncode
-    logger.debug('cmd: ' + ' '.join(args))
-    logger.debug('status: ' + str(status) + ', output: ' + output)
+    try:
+        shutil.copytree(SPHINX_TEMPLATE_PATH, spec_path)
+    except OSError as e:
+        logger.error(e)
+        raise
     return spec_path
 
 
