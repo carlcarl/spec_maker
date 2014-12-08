@@ -6,6 +6,7 @@
 {% block verdor-css %}
 {{ block.super }}
 <link rel="stylesheet" href="{% static "vendor/jstree/3.0.8/themes/default/style.min.css" %}">
+<link rel="stylesheet" href="{% static "vendor/ladda-bootstrap/0.9.4/ladda-themeless.min.css" %}">
 {% endblock %}
 {% block css %}
 {{ block.super }}
@@ -27,7 +28,10 @@
 	<div id="jstree-container" class="jstree-container">
 		<div id="jstree-block"></div>
 	</div>
-	<button id="submit-tree" class="btn btn-primary">Submit</button>
+	<button id="submit-tree" class="btn btn-primary ladda-button" data-style="zoom-in">
+		<span class="ladda-label">Submit
+		</span>
+	</button>
 	<button id="import-tree" class="btn btn-success">Import</button>
 </form>
 <!-- Modal -->
@@ -57,6 +61,8 @@
 {% block vendor-js %}
 {{ block.super }}
 <script src="{% static "vendor/jstree/3.0.8/jstree.min.js" %}"></script>
+<script src="{% static "vendor/ladda-bootstrap/0.9.4/spin.min.js" %}"></script>
+<script src="{% static "vendor/ladda-bootstrap/0.9.4/ladda.min.js" %}"></script>
 <script src="{% static "vendor/underscore.js/1.6.0/underscore-min.js" %}"></script>
 {% endblock %}
 {% block js %}

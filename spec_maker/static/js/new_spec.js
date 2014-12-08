@@ -1,7 +1,7 @@
 /*jslint browser:true */
 /*jslint es5: true */
 /*jslint nomen: true */
-/*global $, jQuery, alert, console, log, _*/
+/*global $, jQuery, alert, console, log, _, Ladda*/
 
 $(function () {
     'use strict';
@@ -87,7 +87,7 @@ $(function () {
     $('#submit-tree').click(function (evt) {
         evt.preventDefault();
 
-        var checkedList, specName, postStr, i, len, count;
+        var checkedList, specName, postStr, i, len, count, ladda;
 
         specName = $('#spec-name').val();
         console.log('You want to create spec: ' + specName);
@@ -112,6 +112,8 @@ $(function () {
         }
         console.log('post str: ' + postStr);
 
+		ladda = Ladda.create(this);
+		ladda.start();
 		console.log('Submit spec tree');
         $.post(
             'specs/',
@@ -121,6 +123,7 @@ $(function () {
             },
             function (data) {
 				console.log('Submit spec tree completed');
+				ladda.stop();
                 if (data.error === undefined) {
                     alert('The response format is wrong!');
                     return -1;
