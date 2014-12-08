@@ -11,5 +11,5 @@
 .vagrant
 */settings/local.py
 public/static/
-public/media/
+# public/media/
 secrets.sls*
