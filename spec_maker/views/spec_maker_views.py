@@ -1,18 +1,18 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.views.decorators.csrf import ensure_csrf_cookie
 from django.conf import settings
+from django.http import HttpResponse
+from django.shortcuts import render
+from django.views.decorators.csrf import ensure_csrf_cookie
 import json
 import logging
 import os
-from spec_maker.utils import get_dir_tree
-from spec_maker.utils import make_spec
 from spec_maker.utils import get_all_specs
-from spec_maker.utils import write_file
+from spec_maker.utils import get_dir_tree
 from spec_maker.utils import get_spec_nodes
+from spec_maker.utils import make_spec
+from spec_maker.utils import write_file
 # from django.contrib.auth.decorators import login_required
 
 logger = logging.getLogger(__name__)
@@ -36,21 +36,26 @@ def spec_list(request):
 def specs(request):
     response = {
         'error': 0,
+        'message': '',
     }
     if request.method == 'GET':
         specs = get_all_specs()
         response['specs'] = specs
-        return HttpResponse(json.dumps(response), content_type='application/json')
     elif request.method == 'POST':
         spec_name = request.POST.get('spec_name')
         node_str = request.POST.get('node_str')
         logger.debug('node_str: ' + node_str)
         node_list = node_str.split(' ')
-        make_spec(spec_name, node_list)
-        return HttpResponse(json.dumps(response), content_type='application/json')
+        try:
+            make_spec(spec_name, node_list)
+        except OSError as e:
+            response['error'] = 1
+            response['message'] = str(e)
     else:
         response['error'] = 1
-        return HttpResponse(json.dumps(response), content_type='application/json')
+        response['message'] = 'Unknown HTTP method: ' + request.method
+
+    return HttpResponse(json.dumps(response), content_type='application/json')
 
 
 def spec(request, spec_name):
@@ -74,8 +79,8 @@ def _get_image_prefix_url(is_secure, http_host, media_url):
 def upload_image(request):
     response = {
         'error': 0,
-        'image_url': '',
         'message': '',
+        'image_url': '',
     }
     if request.method == 'GET':
         return render(request, 'spec_maker/upload_image.html')

@@ -252,7 +252,10 @@ def _make_latexpdf(spec_path):
 
 
 def make_spec(spec_name, node_list):
-    spec_path = _make_empty_spec(spec_name)
+    try:
+        spec_path = _make_empty_spec(spec_name)
+    except OSError:
+        raise
     _save_nodes(node_list, spec_path)
     file_list = _get_rst_file(node_list)
     tree = _get_dir_tree_advance(file_list, spec_path)
