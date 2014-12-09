@@ -62,17 +62,36 @@ $(function () {
 			function (data) {
 				console.log('Request the specified spec nodes completed');
 				console.log(data);
-				var i, len;
+				var i, len, unfoundElements, treeNode, nodeId,
+					messageTemplate;
 				if (data.nodes === 'undefined') {
 					alert('Response format is wrong!');
 					return -1;
 				}
+				unfoundElements = [];
 				for (i = 0, len = data.nodes.length; i < len; i += 1) {
-					// TODO: Check node exists
+					nodeId = '#' + data.nodes[i];
+					treeNode = $('#jstree-block').jstree(
+						'get_node',
+						nodeId
+					);
+					if (!treeNode) {
+						unfoundElements.push('#' + data.nodes[i]);
+					}
 					$('#jstree-block').jstree(
 						'check_node',
-						'#' + data.nodes[i]
+						nodeId
 					);
+				}
+				if (unfoundElements.length) {
+					messageTemplate = _.template(
+						$('#message-template').html(),
+						{
+							'alertClass': 'alert-danger',
+							'message': unfoundElements.join(' and ') + ' not found!'
+						}
+					);
+					$('#message-box').html(messageTemplate);
 				}
 				$('#spec-name').val(specName);
 			}

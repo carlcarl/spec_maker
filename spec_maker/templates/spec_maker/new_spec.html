@@ -60,6 +60,12 @@
 		<input type="radio" name="specOptions" value="<%= projectName %>"> <%= projectName %>
 	</label>
 </script>
+<script type="text/template" id="message-template">
+	<div class="alert <%= alertClass %>" role="alert">
+		<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		<%= message %>
+	</div>
+</script>
 {% endblock %}
 
 {% block vendor-js %}
