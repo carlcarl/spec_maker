@@ -18,22 +18,26 @@
 {% block title %}New Spec{% endblock %}
 
 {% block content %}
-<form class="form content">
-	<h1 class="text-center">New Spec</h1>
-	<hr>
-	<div>
-		<label for="spec-name">Project Name: </label>
-		<input id="spec-name">
+<div class="content">
+	<div id="message-box">
 	</div>
-	<div id="jstree-container" class="jstree-container">
-		<div id="jstree-block"></div>
+	<div class="main-box">
+		<h1 class="text-center">New Spec</h1>
+		<hr>
+		<div>
+			<label for="spec-name">Project Name: </label>
+			<input id="spec-name">
+		</div>
+		<div id="jstree-container" class="jstree-container">
+			<div id="jstree-block"></div>
+		</div>
+		<button id="submit-tree" class="btn btn-primary ladda-button" data-style="zoom-in">
+			<span class="ladda-label">Submit
+			</span>
+		</button>
+		<button id="import-tree" class="btn btn-success">Import</button>
 	</div>
-	<button id="submit-tree" class="btn btn-primary ladda-button" data-style="zoom-in">
-		<span class="ladda-label">Submit
-		</span>
-	</button>
-	<button id="import-tree" class="btn btn-success">Import</button>
-</form>
+</div>
 <!-- Modal -->
 <div class="modal fade" id="specModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
