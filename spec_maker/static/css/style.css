@@ -12,23 +12,23 @@ body {
   margin: 20px auto;
 }
 
-.main-box {
+.main-block {
   padding: 15px 60px 45px;
   background-color: #fff;
   border: 1px solid rgba(0,0,0,0.1);  
   border-radius: 15px;
 }
 
-.main-box .checkbox {
+.main-block .checkbox {
   margin-bottom: 10px;
 }
 
-.main-box .form-heading {
+.main-block .form-heading {
   line-height: 300%;
   text-align: center;
 }
 
-.main-box .checkbox {
+.main-block .checkbox {
   font-weight: normal;
 }
 
