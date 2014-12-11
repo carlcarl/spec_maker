@@ -7,23 +7,63 @@
 $(function () {
 	'use strict';
 	var App, $document,
-		UploadProgressBarStore, UploadImageBoxStore,
-		UploadProgressBarView, UploadImageBoxView;
+		UploadProgressBarStore, UploadProgressBarView,
+		UploadImageBoxStore, UploadImageBoxView,
+		MessageBoxStore, MessageBoxView;
 
 	$document = $(document);
 
-	UploadProgressBarView = {
-		init: function ($element) {
+	MessageBoxView = {
+		init: function ($element, store) {
 			this.$element = $element;
+			this.store = store;
+			this.listener = this.handleEvent.bind(this);
+			$document.on('render_message_box', this.listener);
+		},
+		handleEvent: function (evt) {
+			var i, len, messageList, messageTemplate;
+			switch (evt.type) {
+			case 'render_message_box':
+				this.$element.html('');
+				messageList = this.store.messageList;
+				for (i = 0, len = messageList.length; i < len; i += 1) {
+					messageTemplate = _.template(
+						$('#message-template').html(),
+						{
+							'alertClass': messageList[i].alertClass,
+							'message': messageList[i].message
+						}
+					);
+					this.$element.prepend(messageTemplate);
+				}
+				break;
+			}
+		},
+	};
+
+	MessageBoxStore = {
+		messageList: [],
+		addMessage: function (alertClass, message) {
+			this.messageList.push({
+				'alertClass': alertClass,
+				'message': message
+			});
+			$document.trigger('render_message_box');
+		},
+	};
+
+	UploadProgressBarView = {
+		init: function ($element, store) {
+			this.$element = $element;
+			this.store = store;
 			this.listener = this.handleEvent.bind(this);
 			$document.on('render_progress_bar', this.listener);
 		},
-		handleEvent: function (evt, percent) {
+		handleEvent: function (evt) {
+			var percent;
 			switch (evt.type) {
 			case 'render_progress_bar':
-				if (typeof percent === 'number') {
-					percent = String(percent);
-				}
+				percent = this.store.getPercent();
 				this.$element
 					.css('width', percent + '%')
 					.attr('aria-valuenow', percent)
@@ -37,8 +77,11 @@ $(function () {
 	UploadProgressBarStore = {
 		percent: 0,
 		setPercent: function (percent) {
+			if (typeof percent === 'number') {
+				percent = String(percent);
+			}
 			this.percent = percent;
-			$(document).trigger('render_progress_bar', [percent]);
+			$document.trigger('render_progress_bar');
 		},
 		getPercent: function () {
 			return this.percent;
@@ -46,16 +89,17 @@ $(function () {
 	};
 
 	UploadImageBoxView = {
-		init: function ($element) {
+		init: function ($element, store) {
 			this.$element = $element;
+			this.store = store;
 			this.listener = this.handleEvent.bind(this);
 			$document.on('render_upload_image_box', this.listener);
 		},
-		handleEvent: function (evt, ifShowBorder) {
+		handleEvent: function (evt) {
 			switch (evt.type) {
 			case 'render_upload_image_box':
-				console.log(evt);
-				this.$element.toggleClass('border', ifShowBorder);
+				// console.log(evt);
+				this.$element.toggleClass('border', this.store.ifShowBorder);
 				break;
 			}
 		},
@@ -65,11 +109,11 @@ $(function () {
 		ifShowBorder: false,
 		addBorder: function () {
 			this.ifShowBorder = true;
-			$document.trigger('render_upload_image_box', [this.ifShowBorder]);
+			$document.trigger('render_upload_image_box');
 		},
 		removeBorder: function () {
 			this.ifShowBorder = false;
-			$document.trigger('render_upload_image_box', [this.ifShowBorder]);
+			$document.trigger('render_upload_image_box');
 		},
 		handleFileUpload: function (files) {
 			var i, len, formData, imagesType;
@@ -88,27 +132,15 @@ $(function () {
 
 					this.sendFileToServer(formData);
 				} else {
-					this.addMessage(
+					MessageBoxStore.addMessage(
 						'alert-danger',
 						imagesType[files[i].type] + ': Unsupported file type'
 					);
 				}
 			}
 		},
-		addMessage: function (alertClass, message) {
-			var messageTemplate;
-			messageTemplate = _.template(
-				$('#message-template').html(),
-				{
-					'alertClass': alertClass,
-					'message': message
-				}
-			);
-			$('#message-box').prepend(messageTemplate);
-		},
 		sendFileToServer: function (formData) {
-			var uploadURL, self;
-			self = this;
+			var uploadURL;
 			uploadURL = "/upload_image/"; //Upload URL
 			// ref: http://hayageek.com/drag-and-drop-file-upload-jquery/
 			$.ajax({
@@ -137,15 +169,14 @@ $(function () {
 				success: function (data) {
 					console.log(data);
 					UploadProgressBarStore.setPercent(100);
-					// this.$uploadImageBox.css('border', 'none');
 					if (data.error === 'undefined') {
 						alert('Response format is wrong!');
 						return;
 					}
 					if (data.error === 0) {
-						self.addMessage('alert-success', data.message);
+						MessageBoxStore.addMessage('alert-success', data.message);
 					} else {
-						self.addMessage('alert-danger', data.message);
+						MessageBoxStore.addMessage('alert-danger', data.message);
 					}
 					//$("#status1").append("File upload Done<br>");           
 				}
@@ -157,8 +188,10 @@ $(function () {
 		init: function () {
 			this.$uploadImageBox = $("#upload-image-box");
 			this.$uploadProgressBar = $('#upload-progress-bar');
-			UploadProgressBarView.init(this.$uploadProgressBar);
-			UploadImageBoxView.init(this.$uploadImageBox);
+			this.$messageBox = $('#message-box');
+			UploadProgressBarView.init(this.$uploadProgressBar, UploadProgressBarStore);
+			UploadImageBoxView.init(this.$uploadImageBox, UploadImageBoxStore);
+			MessageBoxView.init(this.$messageBox, MessageBoxStore);
 
 			this.listener = this.handleEvent.bind(this);
 			this.$uploadImageBox
