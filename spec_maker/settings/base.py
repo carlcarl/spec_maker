@@ -83,6 +83,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 
     'compressor.finders.CompressorFinder',
+    'djangobower.finders.BowerFinder',
     # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
@@ -155,6 +156,7 @@ INSTALLED_APPS = (
     # 'allauth.socialaccount.providers.twitter',
 
     'compressor',
+    'djangobower',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -233,3 +235,13 @@ COMPRESS_ROOT = os.path.join(BASE_DIR, "spec_maker/static")
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
 # End allauth
+
+BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_ROOT)
+BOWER_INSTALLED_APPS = (
+    'jquery#1.10.2',
+    'spin.js#1.3.3',
+    'underscore#1.7.0',
+    'jstree#3.0.8',
+    'bootstrap#3.3.1',
+    'ladda-bootstrap#0.1.0'
+)

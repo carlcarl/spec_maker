@@ -5,8 +5,8 @@
 {% load staticfiles %}
 {% block verdor-css %}
 {{ block.super }}
-<link rel="stylesheet" href="{% static "vendor/jstree/3.0.8/themes/default/style.min.css" %}">
-<link rel="stylesheet" href="{% static "vendor/ladda-bootstrap/0.9.4/ladda-themeless.min.css" %}">
+<link rel="stylesheet" href="{% static "jstree/dist/themes/default/style.min.css" %}">
+<link rel="stylesheet" href="{% static "ladda-bootstrap/dist/ladda-themeless.min.css" %}">
 {% endblock %}
 {% block css %}
 {{ block.super }}
@@ -70,10 +70,10 @@
 
 {% block vendor-js %}
 {{ block.super }}
-<script src="{% static "vendor/jstree/3.0.8/jstree.min.js" %}"></script>
-<script src="{% static "vendor/ladda-bootstrap/0.9.4/spin.min.js" %}"></script>
-<script src="{% static "vendor/ladda-bootstrap/0.9.4/ladda.min.js" %}"></script>
-<script src="{% static "vendor/underscore.js/1.6.0/underscore-min.js" %}"></script>
+<script src="{% static "jstree/dist/jstree.min.js" %}"></script>
+<script src="{% static "spin.js/spin.js" %}"></script>
+<script src="{% static "ladda-bootstrap/dist/ladda.min.js" %}"></script>
+<script src="{% static "underscore/underscore-min.js" %}"></script>
 {% endblock %}
 {% block js %}
 <script src="{% static "js/csrf.js" %}"></script>
