@@ -236,6 +236,7 @@ SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
 # End allauth
 
+# For bower
 BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_ROOT)
 BOWER_INSTALLED_APPS = (
     'jquery#1.10.2',
