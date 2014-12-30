@@ -17,17 +17,37 @@
 <div class="content">
 	<div class="main-block">
 		<h1 class="text-center">Spec List</h1>
-		<hr>
-		{% for spec in specs %}
-		<div class="spec-box">
-			<a href="#">{{ spec }}</a>
+		<div id="action-block" class="action-block">
+			<button class="btn btn-default">Rebuild</button>
+			<button class="btn btn-default">Delete</button>
 		</div>
-		{% endfor %}
+		<table class="table">
+			<tr>
+				<th class="col-md-2">
+					<input id="spec-select-all" type="checkbox">
+				</th>
+				<th class="col-md-10">
+					Name
+				</th>
+			</tr>
+			{% for spec in specs %}
+			<tr>
+				<td>
+					<input name="spec-select" type="checkbox" value="{{ spec }}">
+				</td>
+				<td>
+					<a href="#">{{ spec }}</a>
+				</td>
+			</tr>
+			{% endfor %}
+		</table>
 	</div>
 </div>
 
 {% endblock %}
 
 {% block js %}
+<script src="{% static "js/csrf.js" %}"></script>
+<script src="{% static "js/spec_list.js" %}"></script>
 {% endblock %}
 {# vim: set tabstop=4 noexpandtab shiftwidth=4 softtabstop=4: #}
