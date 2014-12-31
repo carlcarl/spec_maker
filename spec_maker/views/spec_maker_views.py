@@ -43,15 +43,16 @@ def specs_action(request):
         specs = get_all_specs()
         response['specs'] = specs
     elif request.method == 'POST':
-        spec_name = request.POST.get('spec_name')
-        node_str = request.POST.get('node_str')
-        logger.debug('node_str: ' + node_str)
-        node_list = node_str.split(' ')
-        try:
-            make_spec(spec_name, node_list)
-        except OSError as e:
-            response['error'] = 1
-            response['message'] = str(e)
+        post_json = json.loads(request.body)
+        action = post_json['action']
+        if action == 'create':
+            spec_name = post_json['spec']
+            nodes = post_json['nodes']
+            try:
+                make_spec(spec_name, nodes)
+            except OSError as e:
+                response['error'] = 1
+                response['message'] = str(e)
     else:
         response['error'] = 1
         response['message'] = 'Unknown HTTP method: ' + request.method
@@ -63,8 +64,8 @@ def spec_nodes(request, spec_name):
     response = {
         'error': 0,
     }
-    node_list = get_spec_nodes(spec_name)
-    response['nodes'] = node_list
+    nodes = get_spec_nodes(spec_name)
+    response['nodes'] = nodes
     return HttpResponse(json.dumps(response), content_type='application/json')
 
 

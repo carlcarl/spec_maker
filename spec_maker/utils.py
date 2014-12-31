@@ -24,8 +24,8 @@ def get_spec_nodes(spec_name):
     path = os.path.join(OUTPUT_SPEC_PATH, spec_name, 'nodes')
     with open(path, 'r') as f:
         node_str = f.readline().rstrip('\n')
-        node_list = node_str.split(' ')
-    return node_list
+        nodes = node_str.split(' ')
+    return nodes
 
 
 def write_file(location, f):
@@ -126,7 +126,7 @@ def _recursive_add_checked_nodes(node):
         node_ptr = node_ptr['parent']
 
 
-def _get_dir_tree_advance(file_list, spec_path):
+def _get_dir_tree_advance(file_names, spec_path):
     tree = _init_node_advance(RST_DIR)
     tree['root'] = spec_path
     node_ptr = tree
@@ -149,7 +149,7 @@ def _get_dir_tree_advance(file_list, spec_path):
             # For the checked rst item to be easily found in the tree
             _insert_node_into_map(node_map, child_name, child_node)
 
-    for file_name in file_list:
+    for file_name in file_names:
         node_ptr = _find_node_in_map(node_map, file_name)
         _recursive_add_checked_nodes(node_ptr)
 
@@ -229,13 +229,13 @@ def _make_empty_spec(spec_name):
     return spec_path
 
 
-def _save_nodes(node_list, spec_path):
+def _save_nodes(nodes, spec_path):
     with open(os.path.join(spec_path, 'nodes'), 'w') as f:
-        f.write(' '.join(node_list) + '\n')
+        f.write(' '.join(nodes) + '\n')
 
 
-def _get_rst_file(node_list):
-    return [f for f in node_list if f.endswith('.rst')]
+def _get_rst_file(nodes):
+    return [f for f in nodes if f.endswith('.rst')]
 
 
 def _make_latexpdf(spec_path):
@@ -256,14 +256,14 @@ def _make_latexpdf(spec_path):
     return status
 
 
-def make_spec(spec_name, node_list):
+def make_spec(spec_name, nodes):
     try:
         spec_path = _make_empty_spec(spec_name)
     except OSError:
         raise
-    _save_nodes(node_list, spec_path)
-    file_list = _get_rst_file(node_list)
-    tree = _get_dir_tree_advance(file_list, spec_path)
+    _save_nodes(nodes, spec_path)
+    file_names = _get_rst_file(nodes)
+    tree = _get_dir_tree_advance(file_names, spec_path)
     _make_index_files(tree)
     # logger.debug(tree)
     _make_latexpdf(spec_path)
