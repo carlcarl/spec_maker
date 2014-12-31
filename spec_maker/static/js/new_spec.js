@@ -6,6 +6,11 @@
 $(function () {
     'use strict';
 
+	// When ladda start and doesn't call stop in some situations,
+	// buttons will be in disabled even we refresh the page,
+	// so just call stopAll at beginning as a workaround
+	Ladda.stopAll();
+
     $.getJSON(
         'tree.json',
         function (data) {
