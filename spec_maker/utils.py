@@ -37,7 +37,6 @@ def write_file(location, f):
                 dest.write(chunk)
     except:
         raise
-    # return '//' + host + settings.MEDIA_URL + 'images/' + f.name
 
 
 def _init_node(data):
