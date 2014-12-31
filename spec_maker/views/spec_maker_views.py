@@ -13,6 +13,7 @@ from spec_maker.utils import get_dir_tree
 from spec_maker.utils import get_spec_nodes
 from spec_maker.utils import make_spec
 from spec_maker.utils import write_file
+from spec_maker.utils import deprecation
 # from django.contrib.auth.decorators import login_required
 
 logger = logging.getLogger(__name__)
@@ -77,6 +78,7 @@ def _get_image_prefix_url(is_secure, http_host, media_url):
 
 @ensure_csrf_cookie
 def upload_image(request):
+    deprecation('Upload images function is no longer for use')
     response = {
         'error': 0,
         'message': '',

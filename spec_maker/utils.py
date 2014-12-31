@@ -6,6 +6,7 @@ import logging
 import sys
 import subprocess
 import shutil
+import warnings
 
 
 SPHINX_TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'doc')
@@ -13,6 +14,10 @@ OUTPUT_SPEC_PATH = SPHINX_TEMPLATE_PATH + os.sep + '..' + os.sep + 'specs'
 RST_DIR = 'rst'
 TOCTREE_INDENT = '   '
 logger = logging.getLogger(__name__)
+
+
+def deprecation(message):
+    warnings.warn(message, DeprecationWarning, stacklevel=2)
 
 
 def get_spec_nodes(spec_name):
