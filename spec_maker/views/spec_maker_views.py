@@ -59,7 +59,7 @@ def specs(request):
     return HttpResponse(json.dumps(response), content_type='application/json')
 
 
-def spec(request, spec_name):
+def spec_nodes(request, spec_name):
     response = {
         'error': 0,
     }
