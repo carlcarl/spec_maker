@@ -17,9 +17,18 @@
 <div class="content">
 	<div class="main-block">
 		<h1 class="text-center">Spec List</h1>
-		<div id="action-block" class="action-block">
-			<button class="btn btn-default">Rebuild</button>
-			<button class="btn btn-default">Delete</button>
+		<div id="action-block" class="form-inline action-block">
+			<div class="form-group">
+				<label class="sr-only" for="filter-field"></label>
+				<div class="input-group">
+					<input id="filter-field" name="filter-field" class="form-control" type="text" placeholder="Filter spec..." autofocus value="">
+					<span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+				</div>
+			</div>
+			<style id="m-search">
+			</style>
+			<button class="btn btn-default" id="rebuild">Rebuild</button>
+			<button class="btn btn-default" id="delete">Delete</button>
 		</div>
 		<table class="table">
 			<tr>
@@ -31,7 +40,7 @@
 				</th>
 			</tr>
 			{% for spec in specs %}
-			<tr>
+			<tr class="search-row" data-index="{{ spec }}">
 				<td>
 					<input name="spec-select" type="checkbox" value="{{ spec }}">
 				</td>

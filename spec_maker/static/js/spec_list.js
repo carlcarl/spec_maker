@@ -14,4 +14,16 @@ $(function () {
             $specSelect[i].checked = checked;
         }
     });
+
+    $('#filter-field').on('keyup', function () {
+        var mSearch, filterField;
+        mSearch = $("#m-search");
+        filterField = $('#filter-field').val();
+        if (!filterField) {
+            mSearch.html('');
+        } else {
+            mSearch.html('.search-row:not([data-index*="' + filterField + '"]) {display: none;}');
+
+        }
+    });
 });
