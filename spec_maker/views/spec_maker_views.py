@@ -34,7 +34,7 @@ def spec_list(request):
     return render(request, 'spec_maker/spec_list.html', {'specs': specs})
 
 
-def specs(request):
+def specs_action(request):
     response = {
         'error': 0,
         'message': '',
