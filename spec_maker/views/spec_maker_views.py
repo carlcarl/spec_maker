@@ -53,6 +53,13 @@ def specs_action(request):
             except OSError as e:
                 response['error'] = 1
                 response['message'] = str(e)
+        elif action == 'rebuild':
+            raise NotImplementedError
+        elif action == 'delete':
+            raise NotImplementedError
+        else:
+            response['error'] = 1
+            response['message'] = 'Unknown action: ' + action
     else:
         response['error'] = 1
         response['message'] = 'Unknown HTTP method: ' + request.method
