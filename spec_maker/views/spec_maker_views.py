@@ -47,14 +47,14 @@ def _spec_action(post_json, response):
             response['error'] = 1
             response['message'] = str(e)
     elif action == 'rebuild':
-        specs = post_json('specs')
+        specs = post_json['specs']
         try:
             rebuild_spec(specs)
         except OSError as e:
             response['error'] = 1
             response['message'] = str(e)
     elif action == 'delete':
-        specs = post_json('specs')
+        specs = post_json['specs']
         try:
             delete_spec(specs)
         except OSError as e:
