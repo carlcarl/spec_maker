@@ -1,8 +1,9 @@
 .main-block {
   /* width: 80%; */
-  min-height: 600px;
+  min-height: 500px;
 }
 
 .action-block {
+  margin-top: 40px;
   margin-bottom: 10px;
 }

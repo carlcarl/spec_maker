@@ -3,7 +3,7 @@
 }
 
 .jstree-container {
-  margin: 10px;
+  margin-top: 10px;
   height: 300px;
   overflow-y: scroll;
 }
