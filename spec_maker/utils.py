@@ -273,6 +273,18 @@ def get_all_specs():
             if os.path.isdir(os.path.join(OUTPUT_SPEC_PATH, f))]
 
 
+def rebuild_spec(specs):
+    for spec in specs:
+        spec_path = os.path.join(OUTPUT_SPEC_PATH, spec)
+        _make_latexpdf(spec_path)
+
+
+def delete_spec(specs):
+    for spec in specs:
+        spec_path = os.path.join(OUTPUT_SPEC_PATH, spec)
+        shutil.rmtree(spec_path)
+
+
 if __name__ == '__main__':
     formatter = logging.Formatter('[%(levelname)s](%(funcName)s/%(lineno)d): %(message)s')
     console = logging.StreamHandler(stream=sys.stdout)
