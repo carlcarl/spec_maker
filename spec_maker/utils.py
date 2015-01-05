@@ -233,7 +233,7 @@ def _save_nodes(nodes, spec_path):
         f.write(' '.join(nodes) + '\n')
 
 
-def _get_rst_file(nodes):
+def _filter_text_files(nodes):
     return [f for f in nodes if f.endswith('.rst')]
 
 
@@ -261,7 +261,7 @@ def make_spec(spec_name, nodes):
     except OSError:
         raise
     _save_nodes(nodes, spec_path)
-    file_names = _get_rst_file(nodes)
+    file_names = _filter_text_files(nodes)
     tree = _get_dir_tree_advance(file_names, spec_path)
     _make_index_files(tree)
     # logger.debug(tree)
