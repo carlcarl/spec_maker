@@ -12,6 +12,8 @@ from spec_maker.utils import get_all_specs
 from spec_maker.utils import get_dir_tree
 from spec_maker.utils import get_spec_nodes
 from spec_maker.utils import make_spec
+from spec_maker.utils import rebuild_spec
+from spec_maker.utils import delete_spec
 from spec_maker.utils import write_file
 from spec_maker.utils import deprecation
 # from django.contrib.auth.decorators import login_required
@@ -34,6 +36,37 @@ def spec_list(request):
     return render(request, 'spec_maker/spec_list.html', {'specs': specs})
 
 
+def _spec_action(post_json, response):
+    action = post_json['action']
+    if action == 'create':
+        spec_name = post_json['spec']
+        nodes = post_json['nodes']
+        try:
+            make_spec(spec_name, nodes)
+        except OSError as e:
+            response['error'] = 1
+            response['message'] = str(e)
+    elif action == 'rebuild':
+        specs = post_json('specs')
+        try:
+            rebuild_spec(specs)
+        except OSError as e:
+            response['error'] = 1
+            response['message'] = str(e)
+    elif action == 'delete':
+        specs = post_json('specs')
+        try:
+            delete_spec(specs)
+        except OSError as e:
+            response['error'] = 1
+            response['message'] = str(e)
+    else:
+        response['error'] = 1
+        response['message'] = 'Unknown action: ' + action
+
+    return response
+
+
 def specs_action(request):
     response = {
         'error': 0,
@@ -44,22 +77,7 @@ def specs_action(request):
         response['specs'] = specs
     elif request.method == 'POST':
         post_json = json.loads(request.body)
-        action = post_json['action']
-        if action == 'create':
-            spec_name = post_json['spec']
-            nodes = post_json['nodes']
-            try:
-                make_spec(spec_name, nodes)
-            except OSError as e:
-                response['error'] = 1
-                response['message'] = str(e)
-        elif action == 'rebuild':
-            raise NotImplementedError
-        elif action == 'delete':
-            raise NotImplementedError
-        else:
-            response['error'] = 1
-            response['message'] = 'Unknown action: ' + action
+        response = _spec_action(post_json, response)
     else:
         response['error'] = 1
         response['message'] = 'Unknown HTTP method: ' + request.method
