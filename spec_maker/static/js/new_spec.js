@@ -132,7 +132,7 @@ $(function () {
 		ladda.start();
 		console.log('Submit spec tree');
 		$.ajax({
-			url: 'specs/',
+			url: '/specs/',
 			type: 'POST',
 			contentType: 'application/json; charset=utf-8',
 			data: JSON.stringify(data),
