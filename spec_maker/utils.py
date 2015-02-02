@@ -9,8 +9,8 @@ import shutil
 import warnings
 
 
-SPHINX_TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'doc')
-OUTPUT_SPEC_PATH = SPHINX_TEMPLATE_PATH + os.sep + '..' + os.sep + 'specs'
+SPHINX_TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), '..', 'doc')
+OUTPUT_SPEC_PATH = os.path.join(os.path.dirname(__file__), 'specs')
 RST_DIR = 'rst'
 TOCTREE_INDENT = '   '
 logger = logging.getLogger(__name__)
