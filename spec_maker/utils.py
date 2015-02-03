@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import os
 import fnmatch
-import json
 import logging
 import sys
 import subprocess
@@ -95,8 +94,9 @@ def get_dir_tree():
         for child_name in fnmatch.filter(dirs, '*'):
             child_node = _init_and_attach_child(node_ptr, child_name)
             _insert_node_into_map(node_map, child_name, child_node)
-        for child_name in fnmatch.filter(files, '*'):
-            _init_and_attach_child(node_ptr, child_name)
+        for child_name in fnmatch.filter(files, '*.md'):
+            _child_name = child_name.replace('.md', '.rst')
+            _init_and_attach_child(node_ptr, _child_name)
     return tree
 
 
@@ -143,7 +143,7 @@ def _get_dir_tree_advance(file_names, spec_path):
             child_node = _init_and_attach_child_advance(node_ptr, child_name)
             child_node['root'] = root
             _insert_node_into_map(node_map, child_name, child_node)
-        for child_name in fnmatch.filter(files, '*'):
+        for child_name in fnmatch.filter(files, '*.rst'):
             child_node = _init_and_attach_child_advance(node_ptr, child_name)
             # For the checked rst item to be easily found in the tree
             _insert_node_into_map(node_map, child_name, child_node)
@@ -192,7 +192,7 @@ def _push_folder_nodes_to_stack(node_stack, nodes):
             node_stack.append(node)
 
 
-def _make_index_file(index_file_name, node_ptr, has_foot):
+def _create_index_file(index_file_name, node_ptr, has_foot):
     node_root = node_ptr['root']
     node_id = node_ptr['id']
     logger.debug('id: ' + node_id + ', ' + 'root: ' + node_root)
@@ -205,16 +205,16 @@ def _make_index_file(index_file_name, node_ptr, has_foot):
             _write_footer(f)
 
 
-def _make_index_files(tree):
+def _create_index_files(tree):
     node_ptr = tree
     node_stack = []
 
-    _make_index_file('index', node_ptr, has_foot=True)
+    _create_index_file('index', node_ptr, has_foot=True)
     _push_folder_nodes_to_stack(node_stack, node_ptr['checked_nodes'])
 
     while len(node_stack) != 0:
         node_ptr = node_stack.pop()
-        _make_index_file(node_ptr['id'], node_ptr, has_foot=False)
+        _create_index_file(node_ptr['id'], node_ptr, has_foot=False)
         _push_folder_nodes_to_stack(node_stack, node_ptr['checked_nodes'])
 
 
@@ -228,7 +228,7 @@ def _make_empty_spec(spec_name):
     return spec_path
 
 
-def _save_nodes(nodes, spec_path):
+def _save_nodes_to_file(nodes, spec_path):
     with open(os.path.join(spec_path, 'nodes'), 'w') as f:
         f.write(' '.join(nodes) + '\n')
 
@@ -255,15 +255,39 @@ def _make_latexpdf(spec_path):
     return status
 
 
+def _change_md_to_rst(spec_path):
+    for root, dirs, files in os.walk(os.path.join(spec_path, RST_DIR)):
+        for child_name in fnmatch.filter(files, '*.md'):
+            logger.debug(child_name)
+            target_name = child_name.replace('.md', '.rst')
+            pandoc_cmd = [
+                'pandoc',
+                '--from=markdown',
+                '--to=rst',
+            ]
+            output_file = '--output=' + target_name
+            pandoc_cmd.append(output_file)
+            pandoc_cmd.append(child_name)
+            p = subprocess.Popen(
+                pandoc_cmd,
+                cwd=root,
+                stdout=subprocess.PIPE
+            )
+            p.communicate()[0]
+            status = p.returncode
+            logger.debug(status)
+
+
 def make_spec(spec_name, nodes):
     try:
         spec_path = _make_empty_spec(spec_name)
     except OSError:
         raise
-    _save_nodes(nodes, spec_path)
+    _save_nodes_to_file(nodes, spec_path)
     file_names = _filter_text_files(nodes)
+    _change_md_to_rst(spec_path)
     tree = _get_dir_tree_advance(file_names, spec_path)
-    _make_index_files(tree)
+    _create_index_files(tree)
     # logger.debug(tree)
     _make_latexpdf(spec_path)
 
@@ -293,5 +317,7 @@ if __name__ == '__main__':
     logger.addHandler(console)
     logger.setLevel(logging.DEBUG)
 
-    tree = get_dir_tree()
-    print(json.dumps(tree['children'], indent=4))
+    # tree = get_dir_tree()
+    # import json
+    # print(json.dumps(tree['children'], indent=4))
+    _change_md_to_rst('./specs/123')
