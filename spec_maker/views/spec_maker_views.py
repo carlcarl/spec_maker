@@ -9,7 +9,7 @@ import json
 import logging
 import os
 from spec_maker.utils import get_all_specs
-from spec_maker.utils import get_dir_tree
+from spec_maker.utils import get_spec_template_tree
 from spec_maker.utils import get_spec_nodes
 from spec_maker.utils import make_spec
 from spec_maker.utils import rebuild_spec
@@ -27,8 +27,8 @@ def new_spec(request):
 
 
 def tree_json(request):
-    dir_tree = get_dir_tree()
-    return HttpResponse(json.dumps(dir_tree), content_type='application/json')
+    spec_template_tree = get_spec_template_tree()
+    return HttpResponse(json.dumps(spec_template_tree), content_type='application/json')
 
 
 def spec_list(request):

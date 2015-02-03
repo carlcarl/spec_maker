@@ -10,7 +10,7 @@ import warnings
 
 SPHINX_TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), '..', 'doc')
 OUTPUT_SPEC_PATH = os.path.join(os.path.dirname(__file__), 'specs')
-RST_DIR = 'rst'
+SRC_DIR = 'src'
 TOCTREE_INDENT = '   '
 logger = logging.getLogger(__name__)
 
@@ -62,7 +62,7 @@ def _attach_child_to_node(node_ptr, child_node):
 
 
 def _is_top_level_in_tree(node_ptr):
-    return node_ptr['id'] == RST_DIR
+    return node_ptr['id'] == SRC_DIR
 
 
 def _find_node_in_map(node_map, key):
@@ -79,12 +79,12 @@ def _init_and_attach_child(node_ptr, data):
     return child_node
 
 
-def get_dir_tree():
-    tree = _init_node(RST_DIR)
+def get_spec_template_tree():
+    tree = _init_node(SRC_DIR)
     node_ptr = tree
     node_map = {}
-    _insert_node_into_map(node_map, RST_DIR, tree)
-    for root, dirs, files in os.walk(os.path.join(SPHINX_TEMPLATE_PATH, RST_DIR)):
+    _insert_node_into_map(node_map, SRC_DIR, tree)
+    for root, dirs, files in os.walk(os.path.join(SPHINX_TEMPLATE_PATH, SRC_DIR)):
         logger.debug(root)
         dirs.sort()
         files.sort()
@@ -95,6 +95,9 @@ def get_dir_tree():
             child_node = _init_and_attach_child(node_ptr, child_name)
             _insert_node_into_map(node_map, child_name, child_node)
         for child_name in fnmatch.filter(files, '*.md'):
+            # Use rst instead of md here
+            # So we receive file name endwith rst
+            # and can be directly used for making pdf later
             _child_name = child_name.replace('.md', '.rst')
             _init_and_attach_child(node_ptr, _child_name)
     return tree
@@ -126,13 +129,13 @@ def _recursive_add_checked_nodes(node):
 
 
 def _get_dir_tree_advance(file_names, spec_path):
-    tree = _init_node_advance(RST_DIR)
+    tree = _init_node_advance(SRC_DIR)
     tree['root'] = spec_path
     node_ptr = tree
     node_map = {
-        RST_DIR: tree
+        SRC_DIR: tree
     }
-    for root, dirs, files in os.walk(os.path.join(spec_path, RST_DIR)):
+    for root, dirs, files in os.walk(os.path.join(spec_path, SRC_DIR)):
         logger.debug(root)
         dirs.sort()
         files.sort()
@@ -157,7 +160,7 @@ def _get_dir_tree_advance(file_names, spec_path):
 
 def _write_header(f, node_id):
     # TODO: Use a dict to get the title
-    title = 'Contents' if node_id == RST_DIR else 'AAA'
+    title = 'Contents' if node_id == SRC_DIR else 'AAA'
     f.write(title + '\n')
     for i in range(len(title)):
         f.write('=')
@@ -255,8 +258,8 @@ def _make_latexpdf(spec_path):
     return status
 
 
-def _change_md_to_rst(spec_path):
-    for root, dirs, files in os.walk(os.path.join(spec_path, RST_DIR)):
+def _change_markdown_to_rst(spec_path):
+    for root, dirs, files in os.walk(os.path.join(spec_path, SRC_DIR)):
         for child_name in fnmatch.filter(files, '*.md'):
             logger.debug(child_name)
             target_name = child_name.replace('.md', '.rst')
@@ -285,7 +288,7 @@ def make_spec(spec_name, nodes):
         raise
     _save_nodes_to_file(nodes, spec_path)
     file_names = _filter_text_files(nodes)
-    _change_md_to_rst(spec_path)
+    _change_markdown_to_rst(spec_path)
     tree = _get_dir_tree_advance(file_names, spec_path)
     _create_index_files(tree)
     # logger.debug(tree)
@@ -317,7 +320,7 @@ if __name__ == '__main__':
     logger.addHandler(console)
     logger.setLevel(logging.DEBUG)
 
-    # tree = get_dir_tree()
+    # tree = get_spec_template_tree()
     # import json
     # print(json.dumps(tree['children'], indent=4))
-    _change_md_to_rst('./specs/123')
+    _change_markdown_to_rst('./specs/123')
