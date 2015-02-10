@@ -1,9 +1,18 @@
+.main-block {
+  padding: 15px 30px 15px;
+}
+
 .content {
   max-width: 600px;
 }
 
 .jstree-container {
   margin-top: 10px;
-  height: 300px;
+  margin-bottom: 20px;
+  height: 400px;
   overflow-y: scroll;
+  border: 1px solid #DDD;
+  border-radius: 5px;
+  padding: 5px;
 }
+

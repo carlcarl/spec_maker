@@ -21,22 +21,24 @@
 <div class="content">
 	<div id="message-box">
 	</div>
-	<div class="main-block">
+	<div class="col-sm-12 main-block">
 		<h1 class="text-center">New Spec</h1>
 		<hr>
-		<div>
+		<div class="col-sm-8">
 			<label for="spec-name">Project Name: </label>
 			<input id="spec-name">
 		</div>
-		<div id="jstree-container" class="jstree-container">
+		<div class="col-sm-4 col-offset-8 text-right">
+			<button id="submit-tree" class="btn btn-primary ladda-button" data-style="zoom-in">
+				<span class="ladda-label">
+					Submit
+				</span>
+			</button>
+			<button id="import-tree" class="btn btn-success">Import</button>
+		</div>
+		<div id="jstree-container" class="col-sm-12 jstree-container">
 			<div id="jstree-block"></div>
 		</div>
-		<button id="submit-tree" class="btn btn-primary ladda-button" data-style="zoom-in">
-			<span class="ladda-label">
-				Submit
-			</span>
-		</button>
-		<button id="import-tree" class="btn btn-success">Import</button>
 	</div>
 </div>
 <!-- Modal -->
