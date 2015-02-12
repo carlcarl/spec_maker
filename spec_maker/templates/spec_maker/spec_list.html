@@ -35,8 +35,11 @@
 				<th class="col-md-2">
 					<input id="spec-select-all" type="checkbox">
 				</th>
-				<th class="col-md-10">
+				<th class="col-md-4">
 					Name
+				</th>
+				<th class="col-md-6">
+					Actions
 				</th>
 			</tr>
 			{% for spec in specs %}
@@ -46,6 +49,9 @@
 				</td>
 				<td>
 					<a href="#">{{ spec }}</a>
+				</td>
+				<td>
+					<a href="{{ MEDIA_URL }}specs/{{ spec }}/{{ spec }}.pdf">Download</a>
 				</td>
 			</tr>
 			{% endfor %}

@@ -326,6 +326,16 @@ def _change_markdown_to_rst(spec_path):
             logger.debug(status)
 
 
+def _copy_spec_to_media_dir(spec_path, spec_name):
+    from django.conf import settings
+    src_path = os.path.join(spec_path, spec_path, 'build', 'latex', spec_name + '.pdf')
+    spec_dir_path = os.path.join(settings.MEDIA_ROOT, 'specs', spec_name)
+    if not os.path.exists(spec_dir_path):
+        os.mkdir(spec_dir_path)
+    target_path = os.path.join(spec_dir_path, spec_name + '.pdf')
+    shutil.copyfile(src_path, target_path)
+
+
 def make_spec(spec_name, nodes):
     try:
         spec_path = _make_empty_spec(spec_name)
@@ -345,6 +355,7 @@ def make_spec(spec_name, nodes):
     _create_index_files(tree)
     # logger.debug(tree)
     _make_latexpdf(spec_path)
+    _copy_spec_to_media_dir(spec_path, spec_name)
 
 
 def get_all_specs():
@@ -352,16 +363,23 @@ def get_all_specs():
             if os.path.isdir(os.path.join(OUTPUT_SPEC_PATH, f))]
 
 
-def rebuild_spec(specs):
-    for spec in specs:
-        spec_path = os.path.join(OUTPUT_SPEC_PATH, spec)
+def rebuild_spec(spec_names):
+    for spec_name in spec_names:
+        spec_path = os.path.join(OUTPUT_SPEC_PATH, spec_name)
         _make_latexpdf(spec_path)
+        _copy_spec_to_media_dir(spec_path, spec_name)
 
 
-def delete_spec(specs):
-    for spec in specs:
-        spec_path = os.path.join(OUTPUT_SPEC_PATH, spec)
+def _delete_spec_from_media_dir(spec_name):
+    from django.conf import settings
+    shutil.rmtree(os.path.join(settings.MEDIA_ROOT, 'specs', spec_name))
+
+
+def delete_spec(spec_names):
+    for spec_name in spec_names:
+        spec_path = os.path.join(OUTPUT_SPEC_PATH, spec_name)
         shutil.rmtree(spec_path)
+        _delete_spec_from_media_dir(spec_name)
 
 
 if __name__ == '__main__':

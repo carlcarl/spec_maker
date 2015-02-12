@@ -82,7 +82,7 @@ $(function () {
             if (result.error === 0) {
                 alert('The specs are deleted successfully!');
             } else {
-                alert('The specs deletion is failed!');
+                alert('The specs deletion is failed: ' + result.message);
             }
             location.reload();
         });
