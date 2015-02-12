@@ -86,20 +86,27 @@ def get_spec_template_tree():
     _insert_node_into_map(node_map, SRC_DIR, tree)
     for root, dirs, files in os.walk(os.path.join(SPHINX_TEMPLATE_PATH, SRC_DIR)):
         logger.debug(root)
-        dirs.sort()
-        files.sort()
         current_dir = root.split(os.sep)[-1]
+
+        if current_dir == 'images':
+            continue
+
+        iNodes = dirs + files
+        iNodes.sort()
         node_ptr = _find_node_in_map(node_map, current_dir)
         assert node_ptr is not None
-        for child_name in fnmatch.filter(dirs, '*'):
-            child_node = _init_and_attach_child(node_ptr, child_name)
-            _insert_node_into_map(node_map, child_name, child_node)
-        for child_name in fnmatch.filter(files, '*.md'):
-            # Use rst instead of md here
-            # So we receive file name endwith rst
-            # and can be directly used for making pdf later
-            _child_name = child_name.replace('.md', '.rst')
-            _init_and_attach_child(node_ptr, _child_name)
+
+        for child_name in iNodes:
+            if os.path.isdir(root + os.sep + child_name) and child_name != 'images':
+                child_node = _init_and_attach_child(node_ptr, child_name)
+                _insert_node_into_map(node_map, child_name, child_node)
+            if child_name.endswith('.md'):
+                # Use rst instead of md here
+                # So we receive file name endwith rst
+                # and can be directly used for making pdf later
+                _child_name = child_name.replace('.md', '.rst')
+                _init_and_attach_child(node_ptr, _child_name)
+
     return tree
 
 
@@ -236,6 +243,44 @@ def _save_nodes_to_file(nodes, spec_path):
         f.write(' '.join(nodes) + '\n')
 
 
+def _customize_conf_py(spec_path, spec_name):
+    args = [
+        'sed',
+        '-i',
+        '-e',
+        '/project_name =/ s/= .*/= u"{0}"/'.format(spec_name),
+        'conf.py',
+    ]
+    p = subprocess.Popen(
+        args,
+        cwd=spec_path,
+        stdout=subprocess.PIPE
+    )
+    p.communicate()
+    status = p.returncode
+    logger.debug('Customize conf.py project_name: ' + str(status))
+    if status != 0:
+        raise Exception('Customize conf.py project_name: failed')
+
+    args = [
+        'sed',
+        '-i',
+        '-e',
+        '/project_file_name =/ s/= .*/= "{0}"/'.format(spec_name),
+        'conf.py',
+    ]
+    p = subprocess.Popen(
+        args,
+        cwd=spec_path,
+        stdout=subprocess.PIPE
+    )
+    p.communicate()
+    status = p.returncode
+    logger.debug('Customize conf.py project_file_name: ' + str(status))
+    if status != 0:
+        raise Exception('Customize conf.py project_file_name: failed')
+
+
 def _filter_text_files(nodes):
     return [f for f in nodes if f.endswith('.rst')]
 
@@ -286,7 +331,14 @@ def make_spec(spec_name, nodes):
         spec_path = _make_empty_spec(spec_name)
     except OSError:
         raise
+
     _save_nodes_to_file(nodes, spec_path)
+
+    try:
+        _customize_conf_py(spec_path, spec_name)
+    except Exception:
+        raise
+
     file_names = _filter_text_files(nodes)
     _change_markdown_to_rst(spec_path)
     tree = _get_dir_tree_advance(file_names, spec_path)

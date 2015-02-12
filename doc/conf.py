@@ -40,8 +40,11 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'test_project'
-copyright = u'2013, Chien-Wei Huang'
+project_file_name = 'test_project'
+project_name = u'Test Project'
+project = project_name
+author = u'Gemtek'
+copyright = u'2013, ' + author
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -191,8 +194,8 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'test_project.tex', u'Test Project Documentation',
-   u'Chien-Wei Huang', 'manual'),
+  ('index', project_file_name + '.tex', project_name + u' Documentation',
+   author, 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -221,8 +224,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'test_project', u'Test Project Documentation',
-     [u'Chien-Wei Huang'], 1)
+    ('index', project_file_name, project_name + u' Documentation',
+     [author], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -235,8 +238,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'test_project', u'Test Project Documentation',
-   u'Chien-Wei Huang', 'test_project', 'One line description of project.',
+  ('index', project_file_name, project_name + u' Documentation',
+   author, project_file_name, 'One line description of project.',
    'Miscellaneous'),
 ]
 
@@ -266,7 +269,7 @@ texinfo_documents = [
 # regardless of the global pdf_compressed setting.
 
 pdf_documents = [
-    ('index', u'test_project', u'test_project', u'carlcarl'),
+    ('index', unicode(project_file_name), project_name, author),
 ]
 
 # A comma-separated list of custom stylesheets. Example:

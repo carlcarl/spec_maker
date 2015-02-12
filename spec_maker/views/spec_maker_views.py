@@ -43,9 +43,10 @@ def _spec_action(post_json, response):
         nodes = post_json['nodes']
         try:
             make_spec(spec_name, nodes)
-        except OSError as e:
+        except Exception as e:
             response['error'] = 1
             response['message'] = str(e)
+            delete_spec([spec_name])
     elif action == 'rebuild':
         specs = post_json['specs']
         try:
