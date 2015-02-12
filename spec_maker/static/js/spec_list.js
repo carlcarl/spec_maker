@@ -84,6 +84,7 @@ $(function () {
             } else {
                 alert('The specs deletion is failed!');
             }
+            location.reload();
         });
     });
 });
