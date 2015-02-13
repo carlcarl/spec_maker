@@ -29,17 +29,30 @@ $(function () {
 
 
     function getSelectedNodesAndAjax(action, ajaxCallback) {
-        var data, specs, $specSelectChecked, i, len;
+        var data, specs, $specSelectChecked, i, len, ladda;
         $specSelectChecked = $('input[name="spec-select"]').filter(':checked');
         specs = [];
         for (i = 0, len = $specSelectChecked.length; i < len; i += 1) {
             specs.push($specSelectChecked[i].value);
+        }
+        if (specs.length === 0) {
+            alert('Choose one of the following items');
+            return;
         }
         data = {
             action: action,
             specs: specs
         };
         console.log(data);
+
+        if (action === 'rebuild') {
+            $('#delete').prop('disabled', true);
+        } else if (action === 'delete') {
+            $('#rebuild').prop('disabled', true);
+        }
+        ladda = Ladda.create($('#' + action)[0]);
+        ladda.start();
+
         $.ajax({
             url: '/specs/',
             type: 'POST',
@@ -50,7 +63,12 @@ $(function () {
             complete: function (jqXHR, textStatus) {
                 console.log(jqXHR);
                 console.log(textStatus);
-                // ladda.stop();
+                if (action === 'rebuild') {
+                    $('#delete').prop('disabled', false);
+                } else if (action === 'delete') {
+                    $('#rebuild').prop('disabled', false);
+                }
+                ladda.stop();
             },
         });
     }

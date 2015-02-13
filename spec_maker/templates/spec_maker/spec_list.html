@@ -3,9 +3,12 @@
 {% load i18n %}
 {% load url from future %}
 {% load staticfiles %}
+
 {% block verdor-css %}
 {{ block.super }}
+<link rel="stylesheet" href="{% static "ladda-bootstrap/dist/ladda-themeless.min.css" %}">
 {% endblock %}
+
 {% block css %}
 {{ block.super }}
 <link rel="stylesheet" href="{% static "css/spec_list.css" %}">
@@ -27,8 +30,16 @@
 			</div>
 			<style id="m-search">
 			</style>
-			<button class="btn btn-default" id="rebuild">Rebuild</button>
-			<button class="btn btn-default" id="delete">Delete</button>
+			<button class="btn btn-primary ladda-button" id="rebuild" data-style="zoom-in">
+				<span class="ladda-label">
+					Rebuild
+				</span>
+			</button>
+			<button class="btn btn-danger ladda-button" id="delete" data-style="zoom-in">
+				<span class="ladda-label">
+					Delete
+				</span>
+			</button>
 		</div>
 		<table class="table">
 			<tr>
@@ -61,6 +72,11 @@
 
 {% endblock %}
 
+{% block vendor-js %}
+{{ block.super }}
+<script src="{% static "spin.js/spin.js" %}"></script>
+<script src="{% static "ladda-bootstrap/dist/ladda.min.js" %}"></script>
+{% endblock %}
 {% block js %}
 <script src="{% static "js/csrf.js" %}"></script>
 <script src="{% static "js/spec_list.js" %}"></script>
