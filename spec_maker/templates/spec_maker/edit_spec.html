@@ -15,24 +15,24 @@
 {% block extra-css %}
 {% endblock %}
 
-{% block title %}New Spec{% endblock %}
+{% block title %}Edit Spec{% endblock %}
 
 {% block content %}
 <div class="content">
 	<div id="message-box">
 	</div>
 	<div class="col-sm-12 main-block">
-		<h2 class="text-center">New Spec</h2>
+		<h2 class="text-center">Edit Spec</h2>
 		<hr>
 		<div class="col-sm-8">
 			<label for="spec-name">Project Name: </label>
-			<input id="spec-name">
+			<input id="spec-name" value={{ spec_name }}>
 		</div>
 		<div class="col-sm-4 col-offset-8 text-right">
 			<button id="import-tree" class="btn btn-default">Import</button>
 			<button id="submit-tree" class="btn btn-primary ladda-button" data-style="zoom-in">
 				<span class="ladda-label">
-					Submit
+					Apply
 				</span>
 			</button>
 		</div>
@@ -82,6 +82,6 @@
 {% endblock %}
 {% block js %}
 <script src="{% static "js/csrf.js" %}"></script>
-<script src="{% static "js/new_spec.js" %}"></script>
+<script src="{% static "js/edit_spec.js" %}"></script>
 {% endblock %}
 {# vim: set tabstop=4 noexpandtab shiftwidth=4 softtabstop=4: #}

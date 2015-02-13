@@ -36,6 +36,10 @@ def spec_list(request):
     return render(request, 'spec_maker/spec_list.html', {'specs': specs})
 
 
+def edit_spec(request, spec_name):
+    return render(request, 'spec_maker/edit_spec.html', {'spec_name': spec_name})
+
+
 def _spec_action(post_json, response):
     action = post_json['action']
     if action == 'create':

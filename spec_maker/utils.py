@@ -230,6 +230,9 @@ def _create_index_files(tree):
 
 def _make_empty_spec(spec_name):
     spec_path = os.path.join(OUTPUT_SPEC_PATH, spec_name)
+    if os.path.exists(spec_path):
+        shutil.rmtree(spec_path)
+        logger.warning('{0} already exists, remove it'.format(spec_path))
     try:
         shutil.copytree(SPHINX_TEMPLATE_PATH, spec_path)
     except OSError as e:
@@ -286,10 +289,26 @@ def _filter_text_files(nodes):
 
 
 def _make_latexpdf(spec_path):
-    logger.debug(spec_path)
     args = [
         'make',
         'latexpdf',
+    ]
+    p = subprocess.Popen(
+        args,
+        cwd=spec_path,
+        stdout=subprocess.PIPE
+    )
+    output = p.communicate()[0]
+    status = p.returncode
+    logger.debug('cmd: ' + ' '.join(args))
+    logger.debug('status: ' + str(status) + ', output: ' + output)
+    return status
+
+
+def _make_html(spec_path):
+    args = [
+        'make',
+        'html',
     ]
     p = subprocess.Popen(
         args,
@@ -328,12 +347,29 @@ def _change_markdown_to_rst(spec_path):
 
 def _copy_spec_to_media_dir(spec_path, spec_name):
     from django.conf import settings
-    src_path = os.path.join(spec_path, spec_path, 'build', 'latex', spec_name + '.pdf')
+    src_pdf_path = os.path.join(spec_path, spec_path, 'build', 'latex', spec_name + '.pdf')
     spec_dir_path = os.path.join(settings.MEDIA_ROOT, 'specs', spec_name)
     if not os.path.exists(spec_dir_path):
         os.mkdir(spec_dir_path)
-    target_path = os.path.join(spec_dir_path, spec_name + '.pdf')
-    shutil.copyfile(src_path, target_path)
+    target_pdf_path = os.path.join(spec_dir_path, spec_name + '.pdf')
+
+    try:
+        shutil.copyfile(src_pdf_path, target_pdf_path)
+    except IOError:
+        logger.error('Copy {0} to {1} failed'.format(src_pdf_path, target_pdf_path))
+        raise
+
+    src_html_path = os.path.join(spec_path, spec_path, 'build', 'html')
+    target_html_path = os.path.join(spec_dir_path, 'html')
+
+    if os.path.exists(target_html_path):
+        shutil.rmtree(target_html_path)
+        logger.warning('{0} already exists, remove it'.format(target_html_path))
+    try:
+        shutil.copytree(src_html_path, target_html_path)
+    except shutil.Error:
+        logger.error('Copy {0} to {1} failed'.format(src_html_path, target_html_path))
+        raise
 
 
 def make_spec(spec_name, nodes):
@@ -355,7 +391,13 @@ def make_spec(spec_name, nodes):
     _create_index_files(tree)
     # logger.debug(tree)
     _make_latexpdf(spec_path)
-    _copy_spec_to_media_dir(spec_path, spec_name)
+    _make_html(spec_path)
+
+    try:
+        _copy_spec_to_media_dir(spec_path, spec_name)
+    except (IOError, shutil.Error):
+        logger.error('Copy {0} failed'.format(spec_name))
+        raise
 
 
 def get_all_specs():
@@ -367,7 +409,12 @@ def rebuild_spec(spec_names):
     for spec_name in spec_names:
         spec_path = os.path.join(OUTPUT_SPEC_PATH, spec_name)
         _make_latexpdf(spec_path)
-        _copy_spec_to_media_dir(spec_path, spec_name)
+        _make_html(spec_path)
+        try:
+            _copy_spec_to_media_dir(spec_path, spec_name)
+        except (IOError, shutil.Error):
+            logger.error('Copy {0} failed'.format(spec_name))
+            raise
 
 
 def _delete_spec_from_media_dir(spec_name):

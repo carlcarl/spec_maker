@@ -11,12 +11,56 @@ $(function () {
 	// so just call stopAll at beginning as a workaround
 	Ladda.stopAll();
 
+	function importTree(url) {
+		$.getJSON(url, function (data) {
+
+			console.log('Request the specified spec nodes completed');
+			console.log(data);
+			var i, len, unfoundElements, treeNode, nodeId,
+				messageTemplate;
+			if (data.nodes === 'undefined') {
+				alert('Response format is wrong!');
+				return -1;
+			}
+			unfoundElements = [];
+			for (i = 0, len = data.nodes.length; i < len; i += 1) {
+				nodeId = '#' + data.nodes[i];
+				treeNode = $('#jstree-block').jstree(
+					'get_node',
+					nodeId
+				);
+				if (!treeNode) {
+					unfoundElements.push('#' + data.nodes[i]);
+				}
+				$('#jstree-block').jstree(
+					'check_node',
+					nodeId
+				);
+			}
+			if (unfoundElements.length) {
+				messageTemplate = _.template(
+					$('#message-template').html()
+				)({
+					'alertClass': 'alert-danger',
+					'message': unfoundElements.join(' and ') + ' not found!'
+				});
+				$('#message-box').html(messageTemplate);
+			}
+			// $('#spec-name').val(specName);
+		});
+	}
+
+
     $.getJSON(
-        'tree.json',
+        '/tree.json',
         function (data) {
+			var url;
 			console.log('Request spec template completed');
             // console.log(data);
-            $('#jstree-block').jstree({
+            $('#jstree-block').bind('loaded.jstree', function () {
+				url = encodeURI('/specs/' + $('#spec-name').val());
+				importTree(url);
+			}).jstree({
                 'core': {
                     'data': [
                         data,
@@ -35,7 +79,7 @@ $(function () {
     );
 
     $.getJSON(
-        'specs/',
+        '/specs/',
         function (data) {
 			console.log('Request spec list completed');
 			var i, len, specTemplate, $specBox;
@@ -58,46 +102,9 @@ $(function () {
 	$('#spec-modal-import').click(function () {
 		var url, specName;
 		specName = $('input[name="specOptions"]:checked').val();
-		url = encodeURI('specs/' + specName);
 		console.log('Request spec template: ' + specName);
-		$.getJSON(
-			url,
-			function (data) {
-				console.log('Request the specified spec nodes completed');
-				console.log(data);
-				var i, len, unfoundElements, treeNode, nodeId,
-					messageTemplate;
-				if (data.nodes === 'undefined') {
-					alert('Response format is wrong!');
-					return -1;
-				}
-				unfoundElements = [];
-				for (i = 0, len = data.nodes.length; i < len; i += 1) {
-					nodeId = '#' + data.nodes[i];
-					treeNode = $('#jstree-block').jstree(
-						'get_node',
-						nodeId
-					);
-					if (!treeNode) {
-						unfoundElements.push('#' + data.nodes[i]);
-					}
-					$('#jstree-block').jstree(
-						'check_node',
-						nodeId
-					);
-				}
-				if (unfoundElements.length) {
-					messageTemplate = _.template(
-						$('#message-template').html()
-					)({
-						'alertClass': 'alert-danger',
-						'message': unfoundElements.join(' and ') + ' not found!'
-					});
-					$('#message-box').html(messageTemplate);
-				}
-				// $('#spec-name').val(specName);
-			}
-		);
+		url = encodeURI('/specs/' + specName);
+		importTree(url);
 	});
 
 	$('#import-tree').click(function (evt) {

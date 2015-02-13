@@ -19,18 +19,9 @@
 {% block content %}
 <div class="content">
 	<div class="main-block">
-		<h1 class="text-center">Spec List</h1>
+		<h2 class="text-center">Spec List</h2>
 		<div id="action-block" class="form-inline action-block">
-			<div class="form-group">
-				<label class="sr-only" for="filter-field"></label>
-				<div class="input-group">
-					<input id="filter-field" name="filter-field" class="form-control" type="text" placeholder="Filter spec..." autofocus value="">
-					<span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
-				</div>
-			</div>
-			<style id="m-search">
-			</style>
-			<button class="btn btn-primary ladda-button" id="rebuild" data-style="zoom-in">
+			<button class="btn btn-success ladda-button" id="rebuild" data-style="zoom-in">
 				<span class="ladda-label">
 					Rebuild
 				</span>
@@ -40,6 +31,15 @@
 					Delete
 				</span>
 			</button>
+			<div class="form-group" style="float:right;">
+				<label class="sr-only" for="filter-field"></label>
+				<div class="input-group">
+					<input id="filter-field" name="filter-field" class="form-control" type="text" placeholder="Search Spec..." autofocus value="">
+					<span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+				</div>
+			</div>
+			<style id="m-search">
+			</style>
 		</div>
 		<table class="table">
 			<tr>
@@ -50,7 +50,7 @@
 					Name
 				</th>
 				<th class="col-md-6">
-					Actions
+					Resources
 				</th>
 			</tr>
 			{% for spec in specs %}
@@ -59,10 +59,11 @@
 					<input name="spec-select" type="checkbox" value="{{ spec }}">
 				</td>
 				<td>
-					<a href="#">{{ spec }}</a>
+					<a href="/spec_list/edit/{{ spec }}">{{ spec }}</a>
 				</td>
 				<td>
-					<a target="_blank" href="{{ MEDIA_URL }}specs/{{ spec }}/{{ spec }}.pdf">Download</a>
+					<a target="_blank" href="{{ MEDIA_URL }}specs/{{ spec }}/{{ spec }}.pdf">PDF</a>
+					<a target="_blank" href="{{ MEDIA_URL }}specs/{{ spec }}/html/index.html">Web</a>
 				</td>
 			</tr>
 			{% endfor %}
