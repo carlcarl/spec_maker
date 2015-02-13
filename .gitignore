@@ -13,4 +13,3 @@
 public/static/
 # public/media/
 secrets.sls*
-doc/build
