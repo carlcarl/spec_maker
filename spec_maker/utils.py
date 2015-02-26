@@ -296,12 +296,13 @@ def _make_latexpdf(spec_path):
     p = subprocess.Popen(
         args,
         cwd=spec_path,
-        stdout=subprocess.PIPE
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
     )
-    output = p.communicate()[0]
+    (output, e) = p.communicate()
     status = p.returncode
     logger.debug('cmd: ' + ' '.join(args))
-    logger.debug('status: ' + str(status) + ', output: ' + output)
+    logger.debug('status: ' + str(status) + ', output: ' + output + ', error: ' + e)
     return status
 
 
@@ -338,11 +339,12 @@ def _change_markdown_to_rst(spec_path):
             p = subprocess.Popen(
                 pandoc_cmd,
                 cwd=root,
-                stdout=subprocess.PIPE
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE
             )
-            p.communicate()[0]
+            (output, e) = p.communicate()
             status = p.returncode
-            logger.debug(status)
+            logger.debug('status: ' + str(status) + ', output: ' + output + ', error: ' + e)
 
 
 def _copy_spec_to_media_dir(spec_path, spec_name):
