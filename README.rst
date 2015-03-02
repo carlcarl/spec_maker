@@ -39,6 +39,14 @@ You should now be able to run the development server::
 Virtualenv Setup
 *****************
 
+::
+
+    sudo apt-get install python-setuptools
+    sudo apt-get install pandoc
+    sudo apt-get install texlive-latex-base texlive-xetex texlive-latex-recommended texlive-latex-extra
+
+    sudo pip install virtualenvwrapper
+
 To setup your local environment you should create a virtualenv and install the
 necessary requirements::
 
