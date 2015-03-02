@@ -25,18 +25,13 @@ Simple Setup
 
 ::
 
-    sudo apt-get install python-setuptools
-    sudo apt-get install pandoc
-    sudo apt-get install texlive-latex-base texlive-xetex texlive-latex-recommended texlive-latex-extra
-
-    sudo easy_install pip
-    sudo pip install -r $PWD/requirements/dev.txt
-
-    cp spec_maker/settings/local.example.py spec_maker/settings/local.py
+    ./simple_setup.sh
 
 You should now be able to run the development server::
 
-    ./manage.py runserver 0.0.0.0:7788
+    ./run.sh
+
+Then open your browser and connect to `http://localhost:7788`
 
 Virtualenv Setup
 *****************
@@ -70,5 +65,7 @@ Exit the virtualenv and reactivate it to activate the settings just changed::
 
 You should now be able to run the development server::
 
-    ./manage.py runserver 0.0.0.0:7788
+    ./run.sh
+
+Then open your browser and connect to `http://localhost:7788`
 
