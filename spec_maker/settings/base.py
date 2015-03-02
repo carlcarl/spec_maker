@@ -182,15 +182,15 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'django.utils.log.NullHandler',
         },
-        # 'logfile': {
-        #     'level': 'DEBUG',
-        #     'class': 'logging.handlers.RotatingFileHandler',
-        #     # 'filename': SITE_ROOT + "/logfile",
-        #     'filename': '/tmp/web_debug.log',
-        #     'maxBytes': 500000,
-        #     'backupCount': 2,
-        #     'formatter': 'standard',
-        # },
+        'logfile': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            # 'filename': SITE_ROOT + "/logfile",
+            'filename': '/tmp/web_debug.log',
+            'maxBytes': 500000,
+            'backupCount': 2,
+            'formatter': 'standard',
+        },
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
@@ -214,7 +214,7 @@ LOGGING = {
         #     'propagate': False,
         # },
         'spec_maker': {
-            'handlers': ['console'],
+            'handlers': ['console', 'logfile'],
             'level': 'DEBUG',
         },
     }
