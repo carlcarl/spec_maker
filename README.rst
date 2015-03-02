@@ -52,6 +52,8 @@ necessary requirements::
     mkvirtualenv spec_maker
     $VIRTUAL_ENV/bin/pip install -r $PWD/requirements/dev.txt
 
+    sed -i "s/pdflatex/xelatex/g" $VIRTUAL_ENV/local/lib/python2.7/site-packages/sphinx/texinputs/Makefile
+
 Then create a local settings file and set your ``DJANGO_SETTINGS_MODULE`` to use it::
 
     cp spec_maker/settings/local.example.py spec_maker/settings/local.py
