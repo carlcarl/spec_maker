@@ -8,7 +8,6 @@ project. To begin you should have the following requirements::
 
 - Python >= 2.7
 
-
 Optional::
 - `virtualenv >= 1.7 <http://www.virtualenv.org/>`_
 - `virtualenvwrapper >= 3.0 <http://pypi.python.org/pypi/virtualenvwrapper>`_
