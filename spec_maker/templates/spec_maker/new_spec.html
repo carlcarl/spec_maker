@@ -42,7 +42,7 @@
 	</div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="specModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="spec-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -58,6 +58,24 @@
 		</div>
 	</div>
 </div>
+
+<div class="modal fade" id="replace-spec-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">Spec Name conflict</h4>
+			</div>
+			<div class="modal-body">
+				<p>Do you want to replace the spec</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+				<button type="button" id="replace-spec-modal-yes" class="btn btn-primary" data-dismiss="modal">Yes</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <script type="text/template" id="spec-template">
 	<label class="radio-inline">

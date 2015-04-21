@@ -11,6 +11,8 @@ $(function () {
 	// so just call stopAll at beginning as a workaround
 	Ladda.stopAll();
 
+	var ladda;
+
     $.getJSON(
         'tree.json',
         function (data) {
@@ -102,25 +104,18 @@ $(function () {
 
 	$('#import-tree').click(function (evt) {
 		evt.preventDefault();
-		$('#specModal').modal();
+		$('#spec-modal').modal();
 	});
 
-    $('#submit-tree').click(function (evt) {
-        evt.preventDefault();
 
-        var checkedList, specName, ladda, data;
-
-        specName = $('#spec-name').val();
-        console.log('You want to create spec: ' + specName);
-        if (specName === '') {
-            alert('Project name is empty!');
-            return false;
-        }
-        checkedList = $('#jstree-block').jstree(
-            'get_checked',
-            null,
-            true
-        );
+	function submitTree() {
+		var specName, checkedList, data;
+		specName = $('#spec-name').val();
+		checkedList = $('#jstree-block').jstree(
+			'get_checked',
+			null,
+			true
+		);
 
 		data = {
 			action: 'create',
@@ -128,8 +123,6 @@ $(function () {
 			nodes: checkedList,
 		};
 
-		ladda = Ladda.create(this);
-		ladda.start();
 		console.log('Submit spec tree');
 		$.ajax({
 			url: '/specs/',
@@ -139,15 +132,15 @@ $(function () {
 			dataType: 'json',
 			success: function (result) {
 				console.log('Submit spec tree completed');
-                if (result.error === undefined) {
-                    alert('The response format is wrong!');
-                    return -1;
-                }
-                if (result.error === 0) {
-                    alert('The spec is created successfully!');
-                } else {
-                    alert('The spec is failed!');
-                }
+				if (result.error === undefined) {
+					alert('The response format is wrong!');
+					return -1;
+				}
+				if (result.error === 0) {
+					alert('The spec is created successfully!');
+				} else {
+					alert('The spec is failed!');
+				}
 			},
 			complete: function (jqXHR, textStatus) {
 				console.log(jqXHR);
@@ -155,6 +148,45 @@ $(function () {
 				ladda.stop();
 			},
 		});
+	}
+
+	$('#replace-spec-modal-yes').click(submitTree);
+
+    $('#submit-tree').click(function (evt) {
+        evt.preventDefault();
+
+		ladda = Ladda.create(this);
+		ladda.start();
+
+		$.getJSON(
+			'specs/',
+			function (data) {
+				console.log('Request spec list completed');
+				var i, len, specName;
+				if (data.specs === 'undefined') {
+					alert('Response format is wrong!');
+					return false;
+				}
+
+				specName = $('#spec-name').val();
+				console.log('You want to create spec: ' + specName);
+
+				if (specName === '') {
+					alert('Project name is empty!');
+					return false;
+				}
+
+				for (i = 0, len = data.specs.length; i < len; i += 1) {
+					if (specName === data.specs[i]) {
+						$('#replace-spec-modal').modal();
+						return false;
+					}
+				}
+
+				submitTree();
+			}
+		);
+
         return false;
     });
 });
