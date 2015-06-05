@@ -23,6 +23,10 @@ sys.path.append(os.path.realpath(os.path.join(p, os.pardir)))
 sys.path.append(p)
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "spec_maker.settings.local")
 
+# Activate your virtual env
+activate_env = os.path.expanduser("/home/carl_huang/.virtualenv/spec_maker/bin/activate_this.py")
+execfile(activate_env, dict(__file__=activate_env))
+
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION
 # setting points here.
