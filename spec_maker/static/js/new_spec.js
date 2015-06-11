@@ -164,8 +164,8 @@ $(function () {
 				console.log('Request spec list completed');
 				var i, len, specName;
 				if (data.specs === 'undefined') {
-					ladda.stop();
 					alert('Response format is wrong!');
+					ladda.stop();
 					return false;
 				}
 
@@ -173,8 +173,8 @@ $(function () {
 				console.log('You want to create spec: ' + specName);
 
 				if (specName === '') {
-					ladda.stop();
 					alert('Project name is empty!');
+					ladda.stop();
 					return false;
 				}
 
