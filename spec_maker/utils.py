@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 import os
 import fnmatch
 import logging
@@ -13,6 +14,20 @@ OUTPUT_SPEC_PATH = os.path.join(os.path.dirname(__file__), 'specs')
 SRC_DIR = 'src'
 TOCTREE_INDENT = '   '
 logger = logging.getLogger(__name__)
+
+
+def get_git_commit_id(project_root):
+    args = [
+        'cat',
+        '.git/refs/heads/master'
+
+    ]
+    p = subprocess.Popen(
+        args,
+        cwd=project_root,
+        stdout=subprocess.PIPE
+    )
+    return p.communicate()[0]
 
 
 def deprecation(message):

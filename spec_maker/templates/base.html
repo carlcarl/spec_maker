@@ -56,6 +56,8 @@
 				<ul class="dropdown-menu" role="menu">
 					<li><a href="{% url 'new_spec' %}">New Spec</a></li>
 					<li><a href="{% url 'spec_list' %}">Spec List</a></li>
+					<li class="divider"></li>
+					<li><a id="git-commit-id" href="#">Git Commit ID</a></li>
 					{% comment %}
 					Use local images instead
 					<li><a href="{% url 'upload_image' %}">Upload Image</a></li>
@@ -93,6 +95,15 @@
 		{% endblock %}
 		{% block extra-js %}
 		{% endblock %}
+		<script>
+			$('#git-commit-id').click(function (){
+				$.getJSON(
+					'git_commit_id.json',
+					function (data) {
+						alert(data.git_commit_id);
+				});
+			});
+		</script>
 
 		{% endblock %} {# body #}
 		{% block extra-body %}
