@@ -164,6 +164,7 @@ $(function () {
 				console.log('Request spec list completed');
 				var i, len, specName;
 				if (data.specs === 'undefined') {
+					ladda.stop();
 					alert('Response format is wrong!');
 					return false;
 				}
@@ -172,6 +173,7 @@ $(function () {
 				console.log('You want to create spec: ' + specName);
 
 				if (specName === '') {
+					ladda.stop();
 					alert('Project name is empty!');
 					return false;
 				}
@@ -179,6 +181,7 @@ $(function () {
 				for (i = 0, len = data.specs.length; i < len; i += 1) {
 					if (specName === data.specs[i]) {
 						$('#replace-spec-modal').modal();
+						ladda.stop();
 						return false;
 					}
 				}
