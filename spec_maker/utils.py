@@ -16,18 +16,40 @@ TOCTREE_INDENT = '   '
 logger = logging.getLogger(__name__)
 
 
-def get_git_commit_id(project_root):
+def get_local_git_commit_id(project_root):
     args = [
-        'cat',
-        '.git/refs/heads/master'
-
+        'git',
+        'rev-parse',
+        'HEAD'
     ]
     p = subprocess.Popen(
         args,
         cwd=project_root,
         stdout=subprocess.PIPE
     )
-    return p.communicate()[0]
+    return p.communicate()[0].rstrip()
+
+
+def get_remote_git_commit_id(project_root):
+    args = [
+        'git',
+        'ls-remote',
+        'origin',
+        '-h',
+        'refs/heads/master'
+    ]
+    p = subprocess.Popen(
+        args,
+        cwd=project_root,
+        stdout=subprocess.PIPE
+    )
+    return p.communicate()[0].split()[0]
+
+
+def is_project_out_of_date(project_root):
+    local_commit_id = get_local_git_commit_id(project_root)
+    remote_commit_id = get_remote_git_commit_id(project_root)
+    return local_commit_id != remote_commit_id
 
 
 def deprecation(message):

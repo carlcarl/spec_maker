@@ -16,7 +16,8 @@ from spec_maker.utils import rebuild_spec
 from spec_maker.utils import delete_spec
 from spec_maker.utils import write_file
 from spec_maker.utils import deprecation
-from spec_maker.utils import get_git_commit_id
+from spec_maker.utils import get_local_git_commit_id
+from spec_maker.utils import is_project_out_of_date
 # from django.contrib.auth.decorators import login_required
 
 logger = logging.getLogger(__name__)
@@ -33,9 +34,17 @@ def tree_json(request):
 
 
 def git_commit_id_json(request):
-    git_commit_id = get_git_commit_id(settings.PROJECT_ROOT)
+    git_commit_id = get_local_git_commit_id(settings.PROJECT_ROOT)
     resp = {
         'git_commit_id': git_commit_id
+    }
+    return HttpResponse(json.dumps(resp), content_type='application/json')
+
+
+def check_project_out_of_date_json(request):
+    is_out_of_date = is_project_out_of_date(settings.PROJECT_ROOT)
+    resp = {
+        'is_project_out_of_date': is_out_of_date
     }
     return HttpResponse(json.dumps(resp), content_type='application/json')
 

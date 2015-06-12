@@ -36,6 +36,14 @@ body {
   margin-bottom: 5px;
 }
 
+#message-box {
+  margin-top: 10px;
+}
+
+.alert {
+  margin-bottom: 10px;
+}
+
 @media(max-width:767px) {
   .footer {
     display: none;

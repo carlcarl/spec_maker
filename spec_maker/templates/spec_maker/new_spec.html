@@ -19,8 +19,6 @@
 
 {% block content %}
 <div class="content">
-	<div id="message-box">
-	</div>
 	<div class="col-sm-12 main-block">
 		<h2 class="text-center">New Spec</h2>
 		<hr>
@@ -83,12 +81,6 @@
 	</label>
 </script>
 
-<script type="text/template" id="message-template">
-	<div class="alert <%= alertClass %>" role="alert">
-		<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-		<%= message %>
-	</div>
-</script>
 {% endblock %}
 
 {% block vendor-js %}
@@ -96,7 +88,6 @@
 <script src="{% static "jstree/dist/jstree.min.js" %}"></script>
 <script src="{% static "spin.js/spin.js" %}"></script>
 <script src="{% static "ladda-bootstrap/dist/ladda.min.js" %}"></script>
-<script src="{% static "underscore/underscore-min.js" %}"></script>
 {% endblock %}
 {% block js %}
 <script src="{% static "js/csrf.js" %}"></script>
