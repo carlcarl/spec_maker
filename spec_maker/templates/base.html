@@ -106,15 +106,6 @@
 		{% block extra-js %}
 		{% endblock %}
 		<script>
-			$('sync-code').click(function () {
-				$.ajax({
-					'url': 'sync_code/',
-					'method': 'POST',
-				})
-				.done(function (data) {
-					console.log(data);
-				});
-			});
 			$(function (){
 				$('#git-commit-id').click(function () {
 					$.getJSON(
@@ -135,6 +126,15 @@
 								'message': 'The code is out-of-date, please update it'
 							});
 							$('#message-box').html(messageTemplate);
+							$('#sync-code').click(function () {
+								$.ajax({
+									'url': 'sync_code/',
+									'method': 'POST',
+								})
+								.done(function (data) {
+									console.log(data);
+								});
+							});
 						}
 					}
 				);
