@@ -62,8 +62,8 @@ def update_code(project_root):
         cwd=project_root,
         stdout=subprocess.PIPE
     )
-    _, status_code = p.communicate()
-    return status_code
+    p.communicate()
+    return p.returncode
 
 
 def deploy_code(project_root):
@@ -77,8 +77,8 @@ def deploy_code(project_root):
         cwd=project_root,
         stdout=subprocess.PIPE
     )
-    _, status_code = p.communicate()
-    return status_code
+    p.communicate()
+    return p.returncode
 
 
 def deprecation(message):
