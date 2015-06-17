@@ -189,7 +189,6 @@ $(function () {
 				submitTree();
 			}
 		);
-
         return false;
     });
 });
