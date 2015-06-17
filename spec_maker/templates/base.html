@@ -90,7 +90,6 @@
 			<div class="alert <%= alertClass %>" role="alert">
 				<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 				<%= message %>
-				<a href="#" id="sync-code">Sync code</a>
 			</div>
 		</script>
 
@@ -123,7 +122,8 @@
 							$('#message-template').html()
 							)({
 								'alertClass': 'alert-warning',
-								'message': 'The code is out-of-date, please update it'
+								'message': `The code is out-of-date, please update it.
+								<a href="#" class="alert-link" id="sync-code">Sync code</a>`
 							});
 							$('#message-box').html(messageTemplate);
 							$('#sync-code').click(function () {
@@ -132,7 +132,12 @@
 									'method': 'POST',
 								})
 								.done(function (data) {
-									console.log(data);
+									if (data.error === 0) {
+										alert(data.message);
+										location.reload();
+									} else {
+										alert(data.message);
+									}
 								});
 							});
 						}

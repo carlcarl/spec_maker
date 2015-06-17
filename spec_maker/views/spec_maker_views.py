@@ -54,7 +54,7 @@ def check_project_out_of_date_json(request):
 def sync_code(request):
     response = {
         'error': 0,
-        'message': '',
+        'message': 'Update success!',
     }
     if request.method != 'POST':
         response['error'] = 1
