@@ -20,6 +20,7 @@ from spec_maker.utils import get_local_git_commit_id
 from spec_maker.utils import is_project_out_of_date
 from spec_maker.utils import update_code
 from spec_maker.utils import deploy_code
+from spec_maker.utils import restart_server
 # from django.contrib.auth.decorators import login_required
 
 logger = logging.getLogger(__name__)
@@ -71,6 +72,12 @@ def sync_code(request):
     if status_code != 0:
         response['error'] = 1
         response['message'] = 'Deploy code failed'
+        return HttpResponse(json.dumps(response), content_type='application/json')
+
+    status_code = restart_server(settings.PROJECT_ROOT)
+    if status_code != 0:
+        response['error'] = 1
+        response['message'] = 'Server restart failed'
         return HttpResponse(json.dumps(response), content_type='application/json')
 
     return HttpResponse(json.dumps(response), content_type='application/json')

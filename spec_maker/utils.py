@@ -81,6 +81,20 @@ def deploy_code(project_root):
     return p.returncode
 
 
+def restart_server(project_root):
+    args = [
+        'touch',
+        'spec_maker/server_wsgi.py'
+    ]
+    p = subprocess.Popen(
+        args,
+        cwd=project_root,
+        stdout=subprocess.PIPE
+    )
+    p.communicate()
+    return p.returncode
+
+
 def deprecation(message):
     warnings.warn(message, DeprecationWarning, stacklevel=2)
 
