@@ -52,6 +52,35 @@ def is_project_out_of_date(project_root):
     return local_commit_id != remote_commit_id
 
 
+def update_code(project_root):
+    args = [
+        'git',
+        'pull'
+    ]
+    p = subprocess.Popen(
+        args,
+        cwd=project_root,
+        stdout=subprocess.PIPE
+    )
+    _, status_code = p.communicate()
+    return status_code
+
+
+def deploy_code(project_root):
+    args = [
+        './manage.py',
+        'collectstatic',
+        '--noinput'
+    ]
+    p = subprocess.Popen(
+        args,
+        cwd=project_root,
+        stdout=subprocess.PIPE
+    )
+    _, status_code = p.communicate()
+    return status_code
+
+
 def deprecation(message):
     warnings.warn(message, DeprecationWarning, stacklevel=2)
 

@@ -18,6 +18,8 @@ from spec_maker.utils import write_file
 from spec_maker.utils import deprecation
 from spec_maker.utils import get_local_git_commit_id
 from spec_maker.utils import is_project_out_of_date
+from spec_maker.utils import update_code
+from spec_maker.utils import deploy_code
 # from django.contrib.auth.decorators import login_required
 
 logger = logging.getLogger(__name__)
@@ -47,6 +49,31 @@ def check_project_out_of_date_json(request):
         'is_project_out_of_date': is_out_of_date
     }
     return HttpResponse(json.dumps(resp), content_type='application/json')
+
+
+def sync_code(request):
+    response = {
+        'error': 0,
+        'message': '',
+    }
+    if request.method != 'POST':
+        response['error'] = 1
+        response['message'] = 'Invalid method'
+        return HttpResponse(json.dumps(response), content_type='application/json')
+
+    status_code = update_code(settings.PROJECT_ROOT)
+    if status_code != 0:
+        response['error'] = 1
+        response['message'] = 'Update code failed'
+        return HttpResponse(json.dumps(response), content_type='application/json')
+
+    status_code = deploy_code(settings.PROJECT_ROOT)
+    if status_code != 0:
+        response['error'] = 1
+        response['message'] = 'Deploy code failed'
+        return HttpResponse(json.dumps(response), content_type='application/json')
+
+    return HttpResponse(json.dumps(response), content_type='application/json')
 
 
 def spec_list(request):
