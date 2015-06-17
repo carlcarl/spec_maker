@@ -82,6 +82,7 @@ def deploy_code(project_root):
 
 
 def restart_server(project_root):
+    # Will not work if in 500 internal error
     args = [
         'touch',
         'spec_maker/server_wsgi.py'
