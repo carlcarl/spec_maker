@@ -1,10 +1,11 @@
 # CM LOG SPEC
+
 ##### Feature Description:
 This feature reports important cm event or information via syslog.
 To easily indicate which category the logs belong to, all log will add a fixed prefix "[CM]".
 ##### Log Format:
-- [CM]SIM - detect ... inserted/removed
-- [CM]SIM - pin verify ... ok/fail
+1. [CM]SIM - detect ... inserted/removed
+2. [CM]SIM - pin verify ... ok/fail
 - [CM]SIM - pin modify ... ok/fail
 - [CM]SIM - pin enable ... ok/fail
 - [CM]SIM - pin disable ... ok/fail
