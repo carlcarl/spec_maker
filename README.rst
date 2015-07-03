@@ -46,7 +46,7 @@ Virtualenv Setup
     sudo pip install virtualenvwrapper
 
 To setup your local environment you should create a virtualenv and install the
-necessary requirements::
+necessary requirements(maybe you need to source /urs/local/bin/virtualenvwrapper.sh manually)::
 
     mkvirtualenv spec_maker
     $VIRTUAL_ENV/bin/pip install -r $PWD/requirements/dev.txt
