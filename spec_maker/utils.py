@@ -6,6 +6,7 @@ import logging
 import sys
 import subprocess
 import shutil
+import re
 import warnings
 
 
@@ -246,9 +247,8 @@ def _get_dir_tree_advance(file_names, spec_path):
     return tree
 
 
-def _write_header(f, node_id):
+def _write_header(f, title, node_id):
     # TODO: Use a dict to get the title
-    title = 'Contents' if node_id == SRC_DIR else 'AAA'
     f.write(title + '\n')
     for i in range(len(title)):
         f.write('=')
@@ -289,8 +289,10 @@ def _create_index_file(index_file_name, node_ptr, has_foot):
     logger.debug('id: ' + node_id + ', ' + 'root: ' + node_root)
     index_file_path = os.path.join(node_root, index_file_name + '.rst')
     logger.debug('index file path: ' + index_file_path)
+    results = re.findall('(?:[0-9]+_)*(.*)', index_file_name)
+    title = 'Contents' if results[0] == 'index' else results[0].upper()
     with open(index_file_path, 'w') as f:
-        _write_header(f, node_id)
+        _write_header(f, title, node_id)
         _write_content(f, node_id, node_ptr['checked_nodes'])
         if has_foot:
             _write_footer(f)
