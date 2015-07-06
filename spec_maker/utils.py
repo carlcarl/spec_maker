@@ -427,6 +427,9 @@ def _change_markdown_to_rst(spec_path):
             )
             (output, e) = p.communicate()
             status = p.returncode
+            if status != 0:
+                logger.error('status: ' + str(status) + ', output: ' + output + ', error: ' + e)
+                sys.exit(-1)
             logger.debug('status: ' + str(status) + ', output: ' + output + ', error: ' + e)
 
 
