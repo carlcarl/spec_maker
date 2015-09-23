@@ -2,7 +2,7 @@
 
 sudo apt-get install python-setuptools
 sudo apt-get install pandoc
-sudo apt-get install texlive-latex-base texlive-xetex texlive-latex-recommended texlive-latex-extra
+sudo apt-get install texlive-latex-base texlive-xetex texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended
 
 sudo easy_install pip
 sudo pip install -r $PWD/requirements/dev.txt

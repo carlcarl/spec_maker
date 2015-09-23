@@ -124,7 +124,7 @@
 			$(function (){
 				$('#git-commit-id').click(function () {
 					$.getJSON(
-						'git_commit_id.json',
+						'/git_commit_id.json',
 						function (data) {
 							alert(data.git_commit_id);
 						}
